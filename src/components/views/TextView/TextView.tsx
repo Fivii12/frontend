@@ -23,12 +23,26 @@ export function TextView({ textBlock, selectedBlockStyle }: TextViewProps) {
         ...selectedBlockStyle,
     };
 
+
+    const squareStyle: React.CSSProperties = {
+        width: '10px',
+        height: '10px',
+        backgroundColor: 'red',
+        position: 'absolute',
+        bottom: '0',
+        right: '0',
+        opacity: 0.5,
+
+    };
+
+    
     return (
-        <textarea
-            className={styles.textBlock}
-            style={{ ...textStyle, resize: 'none' }}
-        >
-            {textBlock.data[0].value}
-        </textarea>
+        <div style={{...textStyle, position:'absolute'}}>
+            <textarea className={styles.textBlock} style={{ ...textStyle, resize: 'none', position:'fixed' }}>
+                {textBlock.data[0].value}
+            </textarea>
+            <div style={squareStyle}></div>
+        </div>
+        
     );
 }

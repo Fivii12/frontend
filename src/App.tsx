@@ -54,11 +54,14 @@ function App() {
   const handleMouseDown = (event: React.MouseEvent) => {
     const isButtonClicked = (event.target as HTMLElement).id === 'applyButton';
     if (!isButtonClicked) {
-      const clickedBlock = page.objects.find((block) => {
+      const reversedObjects = [...page.objects].reverse();
+
+      const clickedBlock = reversedObjects.find((block) => {
         const blockX = block.position.x;
         const blockY = block.position.y;
         const blockWidth = block.size.width;
         const blockHeight = block.size.height;
+
         return (
           event.clientX >= blockX &&
           event.clientX <= blockX + blockWidth &&
@@ -66,6 +69,7 @@ function App() {
           event.clientY <= blockY + blockHeight
         );
       });
+      console.log(selectedBlock)
       if (clickedBlock) {
         setSelectedBlock(clickedBlock);
         setIsMovingBlock(true);
@@ -104,16 +108,8 @@ function App() {
         const x = clientX;
         const y = clientY;
 
-        const blockWidth = appState.blockToAdd.size.width;
-        const blockHeight = appState.blockToAdd.size.height;
-
         let updatedBlock: TextBlock | ImageBlock | ArtObjectBlock;
-        if (
-          x >= 0 &&
-          y >= 30 &&
-          x + blockWidth <= canvasSize.width &&
-          y + blockHeight <= canvasSize.height + 30
-        ) {
+        if (x >= 0 && y >= 13 && x <= pageSize.width && y <= pageSize.height) {
           updatedBlock = {
             ...appState.blockToAdd,
             position: { x, y, z: 0 },
@@ -142,15 +138,16 @@ function App() {
       setPage((prevPage) => {
         const updatedObjects = prevPage.objects.map((prevBlock) => {
           if (prevBlock.id === selectedBlock.id) {
-            const controlX = prevBlock.position.x + MoveX;
-            const controlY = prevBlock.position.y + MoveY;
+            const ControlX = prevBlock.position.x + MoveX;
+            const ControlY = prevBlock.position.y + MoveY;
+            console.log(prevBlock.size.height)
 
-            if (controlX >= 0 && controlY >= 30 && controlX + prevBlock.size.width <= canvasSize.width && controlY + prevBlock.size.height <= canvasSize.height + 30) {
+            if (ControlX >= 0 && ControlY >= 30 && ControlX + prevBlock.size.width <= canvasSize.width && ControlY + prevBlock.size.height <= canvasSize.height + 30) {
               return {
                 ...prevBlock,
                 position: {
-                  x: controlX,
-                  y: controlY,
+                  x: ControlX,
+                  y: ControlY,
                   z: prevBlock.position.z,
                 },
               };
@@ -236,7 +233,6 @@ function App() {
       isAddingBlock: true,
       blockToAdd: newBlock,
     });
-
   };
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -261,7 +257,7 @@ function App() {
     }
   };
 
-  //удаление блока на пкм
+
   const removeBlock = (blockIdToRemove: string) => {
     setPage((prevPage) => ({
       ...prevPage,
@@ -277,7 +273,8 @@ function App() {
     }
   };
   //текст
-  const handleTextChange = () => {
+  const handleFontSizeChange = () => {
+    console.log(fontFamilyInput, fontSizeInput, selectedBlock, isBold)
     if (selectedBlock && selectedBlock.type === 'text' && fontSizeInput !== null) {
       setPage((prevPage) => ({
         ...prevPage,
@@ -303,13 +300,14 @@ function App() {
     }
   };
 
-  //5лаба сохранение
+  //save
 
   const saveToJSON = () => {
     const jsonContent = JSON.stringify(page);
     const blob = new Blob([jsonContent], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
 
+    // Создаем ссылку для скачивания файла
     const a = document.createElement('a');
     a.href = url;
     a.download = 'document.json';
@@ -373,11 +371,11 @@ function App() {
           value={textColor !== null ? textColor : ''}
           onChange={(e) => setTextColor(e.target.value !== '' ? e.target.value : null)}
         />
-        <button id='applyButton' onClick={handleTextChange}>Применить</button>
+        <button id='applyButton' onClick={handleFontSizeChange}>Применить</button>
         <button onClick={saveToJSON}>Сохранить в JSON</button>
         <input key={inputKey} type="file" accept=".json" onChange={loadFromJSON} />
       </div>
-      <PageView page={page} selectedBlock={selectedBlock} selectedBlockStyle={selectedBlockStyle} />
+      <PageView page={page} selectedBlock={selectedBlock} selectedBlockStyle={selectedBlockStyle}  />
     </div>
   );
 }

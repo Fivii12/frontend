@@ -20,6 +20,16 @@ export function ArtObjectView({ artObjectBlock, selectedBlockStyle }: ArtObjectV
         ...selectedBlockStyle, 
     };
 
+    const squareStyle: React.CSSProperties = {
+        width: '10px',
+        height: '10px',
+        backgroundColor: 'red',
+        position: 'absolute',
+        bottom: '0',
+        right: '0',
+        opacity: 0.5,
+    };
+
     let artObj
 
     if (artObjectBlock.artObject === "triangle") {
@@ -59,8 +69,9 @@ export function ArtObjectView({ artObjectBlock, selectedBlockStyle }: ArtObjectV
 
 
     return (
-        <div className={styles.artObjectView} style={artObjectStyle}>
+        <div className={styles.artObjectView} style={{...artObjectStyle, position:'absolute'}}>
             {artObj}
+            <div style={squareStyle}></div>
         </div>
     );
 }

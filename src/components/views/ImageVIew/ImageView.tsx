@@ -15,12 +15,25 @@ export function ImageView({ imageBlock, selectedBlockStyle }: ImageViewProps) {
         top: `${imageBlock.position.y}px`,
         width: `${imageBlock.size.width}px`,
         height: `${imageBlock.size.height}px`,
-        ...selectedBlockStyle, 
+        ...selectedBlockStyle,
+    };
+
+    const squareStyle: React.CSSProperties = {
+        width: '10px',
+        height: '10px',
+        backgroundColor: 'red',
+        position: 'absolute',
+        bottom: '0',
+        right: '0',
+        opacity: 0.5,
+
     };
 
     return (
-        <div>
-            <img className={styles.imageView} style={imageStyle} src={imageBlock.data} alt=""/>
+        <div style={{...imageStyle, position:'absolute'}}>
+            <img className={styles.imageView} style={{...imageStyle, position:'fixed'}} src={imageBlock.data} alt=""/>
+            <div style={squareStyle}></div>
+
         </div>
     );
 }
