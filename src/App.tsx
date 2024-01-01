@@ -69,7 +69,6 @@ function App() {
           event.clientY <= blockY + blockHeight
         );
       });
-      console.log(selectedBlock)
       if (clickedBlock) {
         setSelectedBlock(clickedBlock);
         setIsMovingBlock(true);
@@ -140,7 +139,6 @@ function App() {
           if (prevBlock.id === selectedBlock.id) {
             const ControlX = prevBlock.position.x + MoveX;
             const ControlY = prevBlock.position.y + MoveY;
-            console.log(prevBlock.size.height)
 
             if (ControlX >= 0 && ControlY >= 30 && ControlX + prevBlock.size.width <= canvasSize.width && ControlY + prevBlock.size.height <= canvasSize.height + 30) {
               return {
@@ -256,7 +254,7 @@ function App() {
       setImageInputKey((prevKey) => prevKey + 1);
     }
   };
-
+  //удаление блока на пкм
 
   const removeBlock = (blockIdToRemove: string) => {
     setPage((prevPage) => ({
@@ -273,8 +271,7 @@ function App() {
     }
   };
   //текст
-  const handleFontSizeChange = () => {
-    console.log(fontFamilyInput, fontSizeInput, selectedBlock, isBold)
+  const handleTextChange = () => {
     if (selectedBlock && selectedBlock.type === 'text' && fontSizeInput !== null) {
       setPage((prevPage) => ({
         ...prevPage,
@@ -307,7 +304,6 @@ function App() {
     const blob = new Blob([jsonContent], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
 
-    // Создаем ссылку для скачивания файла
     const a = document.createElement('a');
     a.href = url;
     a.download = 'document.json';
@@ -371,7 +367,7 @@ function App() {
           value={textColor !== null ? textColor : ''}
           onChange={(e) => setTextColor(e.target.value !== '' ? e.target.value : null)}
         />
-        <button id='applyButton' onClick={handleFontSizeChange}>Применить</button>
+        <button id='applyButton' onClick={handleTextChange}>Применить</button>
         <button onClick={saveToJSON}>Сохранить в JSON</button>
         <input key={inputKey} type="file" accept=".json" onChange={loadFromJSON} />
       </div>
